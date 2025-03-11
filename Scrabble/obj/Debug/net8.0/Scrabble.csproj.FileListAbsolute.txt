@@ -1,0 +1,14 @@
+E:\Data Bootcamp\Scrabble\Scrabble\bin\Debug\net8.0\Scrabble.exe
+E:\Data Bootcamp\Scrabble\Scrabble\bin\Debug\net8.0\Scrabble.deps.json
+E:\Data Bootcamp\Scrabble\Scrabble\bin\Debug\net8.0\Scrabble.runtimeconfig.json
+E:\Data Bootcamp\Scrabble\Scrabble\bin\Debug\net8.0\Scrabble.dll
+E:\Data Bootcamp\Scrabble\Scrabble\bin\Debug\net8.0\Scrabble.pdb
+E:\Data Bootcamp\Scrabble\Scrabble\obj\Debug\net8.0\Scrabble.GeneratedMSBuildEditorConfig.editorconfig
+E:\Data Bootcamp\Scrabble\Scrabble\obj\Debug\net8.0\Scrabble.AssemblyInfoInputs.cache
+E:\Data Bootcamp\Scrabble\Scrabble\obj\Debug\net8.0\Scrabble.AssemblyInfo.cs
+E:\Data Bootcamp\Scrabble\Scrabble\obj\Debug\net8.0\Scrabble.csproj.CoreCompileInputs.cache
+E:\Data Bootcamp\Scrabble\Scrabble\obj\Debug\net8.0\Scrabble.dll
+E:\Data Bootcamp\Scrabble\Scrabble\obj\Debug\net8.0\refint\Scrabble.dll
+E:\Data Bootcamp\Scrabble\Scrabble\obj\Debug\net8.0\Scrabble.pdb
+E:\Data Bootcamp\Scrabble\Scrabble\obj\Debug\net8.0\Scrabble.genruntimeconfig.cache
+E:\Data Bootcamp\Scrabble\Scrabble\obj\Debug\net8.0\ref\Scrabble.dll
