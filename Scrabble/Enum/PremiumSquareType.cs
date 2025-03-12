@@ -1,7 +1,7 @@
 enum PremiumSquareType {
     None,
-    DobleLetter,
-    DobleWord,
-    TripleLetter,
-    TripleWord,
+    DL,
+    DW,
+    TL,
+    TW
 }

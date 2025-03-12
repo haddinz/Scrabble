@@ -13,3 +13,18 @@ E:\Data Bootcamp\Scrabble\Scrabble\obj\Debug\net8.0\Scrabble.pdb
 E:\Data Bootcamp\Scrabble\Scrabble\obj\Debug\net8.0\Scrabble.genruntimeconfig.cache
 E:\Data Bootcamp\Scrabble\Scrabble\obj\Debug\net8.0\ref\Scrabble.dll
 E:\Data Bootcamp\Scrabble\Scrabble\obj\Debug\net8.0\Scrabble.sourcelink.json
+D:\C#\Scrabble\Scrabble\bin\Debug\net8.0\Scrabble.exe
+D:\C#\Scrabble\Scrabble\bin\Debug\net8.0\Scrabble.deps.json
+D:\C#\Scrabble\Scrabble\bin\Debug\net8.0\Scrabble.runtimeconfig.json
+D:\C#\Scrabble\Scrabble\bin\Debug\net8.0\Scrabble.dll
+D:\C#\Scrabble\Scrabble\bin\Debug\net8.0\Scrabble.pdb
+D:\C#\Scrabble\Scrabble\obj\Debug\net8.0\Scrabble.GeneratedMSBuildEditorConfig.editorconfig
+D:\C#\Scrabble\Scrabble\obj\Debug\net8.0\Scrabble.AssemblyInfoInputs.cache
+D:\C#\Scrabble\Scrabble\obj\Debug\net8.0\Scrabble.AssemblyInfo.cs
+D:\C#\Scrabble\Scrabble\obj\Debug\net8.0\Scrabble.csproj.CoreCompileInputs.cache
+D:\C#\Scrabble\Scrabble\obj\Debug\net8.0\Scrabble.sourcelink.json
+D:\C#\Scrabble\Scrabble\obj\Debug\net8.0\Scrabble.dll
+D:\C#\Scrabble\Scrabble\obj\Debug\net8.0\refint\Scrabble.dll
+D:\C#\Scrabble\Scrabble\obj\Debug\net8.0\Scrabble.pdb
+D:\C#\Scrabble\Scrabble\obj\Debug\net8.0\Scrabble.genruntimeconfig.cache
+D:\C#\Scrabble\Scrabble\obj\Debug\net8.0\ref\Scrabble.dll

@@ -1,28 +1,29 @@
 class GameController {
-    private readonly IBoard Board;
-    private readonly List<IPlayer> Players;
-    private readonly ITileBag TileBag;
-    private readonly IDictionary Dictionary;
+    private Board Board;
+    private List<IPlayer> Players;
+    private ITileBag TileBag;
+    private IDictionary Dictionary;
     private int CurrentPlayerIndex;
     private GameStatus Status;
-    private readonly Func<string, bool> ValidateWord;
-    private readonly Action<IPlayer> OnTrunAdvanced;
+    private Func<string, bool> ValidateWord;
+    private Action<IPlayer> OnTrunAdvanced;
 
     public GameController(Func<string, bool> validation, Action<IPlayer> trunAdvanced){
+        this.ValidateWord = validation;
+        this.OnTrunAdvanced = trunAdvanced;
+
         this.Board = new Board();
         this.Players = new List<IPlayer>();
         this.TileBag = new TileBag();
         this.Dictionary = new Dictionary();
-        this.ValidateWord = validation;
-        this.OnTrunAdvanced = trunAdvanced;
-        this.CurrentPlayerIndex = 0;
         this.Status = GameStatus.NotStarted;
+
+        this.CurrentPlayerIndex = 0;
     }
 
     public void StartGame(){
         this.Status = GameStatus.InProgress;
         Console.WriteLine("Game Started");
-        Board.Render();
     }
 
     public void AdvanceTurn(){
@@ -33,88 +34,83 @@ class GameController {
         this.OnTrunAdvanced(Players[CurrentPlayerIndex]);
     }
 
-    //pass swap tiles
     public void SwapTiles(IPlayer player, List<Tile> tiles){
-        player.GetName();
-        // this.TileBag.SwapTiles(tiles);
+        foreach(var tile in tiles){
+            player.Tiles.Remove(tile);
+            player.Tiles.Add(TileBag.DrawTiles(1).First());
+        }
     }
 
-    //pass passturn
     public void PassTurn(IPlayer player){
-        this.AdvanceTurn();
+        Console.WriteLine($"{player.GetName()} passed their turn.");
+        AdvanceTurn();
     }
 
-    public void ChallengeWord(IPlayer challenger) => ValidateWord("Example");
+    public bool ChallengeWord(IPlayer challenger){
+        Console.WriteLine($"{challenger.GetName()} challenged the word.");
+        return true;
+    }
 
-    //pass IsGameOver
     public bool IsGameOver(){
-        return this.Status == GameStatus.GameOver;
+        return this.TileBag.TilesRemaining() == 0 && this.Players.All(p => p.Tiles.Count == 0);
     }
 
-    //pass CalculateFinalScore
     public void CalculateFinalScore(){
-        if(this.Status == GameStatus.Completed){
-            foreach(IPlayer player in this.Players){
-                player.GetScore();
-            }
+        foreach (var player in Players)
+        {
+            int penalty = player.Tiles.Sum(t => t.Value);
+            player.AddScore(-penalty);
         }    
     }
 
-    //pass GetStatus
     public GameStatus GetStatus(){
         return this.Status;
     }
     
     public void EndGame(){
         this.Status = GameStatus.Completed;
-        Console.WriteLine("Game Over!");
+        Console.WriteLine("Game ended!");
     }
     
-    //pass RenderBoard
+    public IPlayer GameWinner()
+    {
+        return Players.OrderByDescending(p => p.GetScore()).First();
+    }
+
     public void RenderBoard(){
         this.Board.Render();
     }
     
-    //pass PlaceWord
     public int PlaceWord(IPlayer player, Word word){
-        if(ValidateWordPlacement(word.ToString())){
-            return this.Board.PlaceWorld(player, word);
-        }
-
-        return 1;
+        if (!ValidateWordPlacement(word.ToString())) return 0;
+        int score = this.Board.PlaceWorld(player, word);
+        player.AddScore(score);
+        return score;
     }
     
-    //pass ValidateWordPlacement
     public bool ValidateWordPlacement(string word){
-        return this.Dictionary.IsValidWord(word);
+        // return this.Board.IsValidPlacement(word) && this.Dictionary.IsValidWord(word);
+        return true;
     }
     
-    //pass ClaculateWordScore
     public int CalculateWordScore(Word word) {
-        int score = 0;
-        foreach (Tile tile in word.Tiles) {
-            score += tile.Value;
-        }
+        int score = word.Tiles.Sum(t => t.Value);
+        return ApplyPremiumMultipliers(word, score);
+    }
+
+    public int ApplyPremiumMultipliers(Word word, int score) {
         return score;
     }
 
-    //pass ApplyPremiumMultipliers
-    public int ApplyPremiumMultipliers(Word word) {
-        return 0;
-    }
-
-    //pass IsValidPlacement
     public bool IsValidPlacement(Word word) {
-        return false;
+        return this.Board.IsValidPlacement(word);
     }
 
-    //pass IsAdjacentToExisting
     public bool IsAdjacentToExisting(Word word) {
-        return false;
+        return this.Board.IsAdjacentToExisting(word);
     }
     
-    //pass IsCentered
     public bool IsCentered(Word word) {
-        return false;
+        return this.Board.IsCentered(word);
     }
 }

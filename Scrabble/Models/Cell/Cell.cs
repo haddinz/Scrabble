@@ -1,10 +1,17 @@
 class Cell {
-    public Tile? Tile{get; private set;}
-    public bool IsOccupied => this.Tile != null;
-    public PremiumSquareType PremiumType;
+    public Tile? Tile{get; set;}
+    public bool IsOccupied{get; set;}
+    public PremiumSquareType PremiumType{get; set;}
     public bool IsPremiumUsed{get;}
 
-    public Cell() => Tile = null;
+    public Cell() {
+        this.IsOccupied = false;
+        this.PremiumType = PremiumSquareType.None;
+        this.IsPremiumUsed = false;
+    }
 
-    public void PlaceTile(Tile tile) => this.Tile = tile;
+    public void PlaceTile(Tile tile){
+        this.Tile = tile;
+        this.IsOccupied = true;
+    }
 }

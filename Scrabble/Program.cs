@@ -2,13 +2,15 @@
 class Program {
     static void Main() {
 
-        Func<string, bool> validation = word => !string.IsNullOrEmpty(word) && word.Length > 2;
-        Action<IPlayer> onTurnAdvanced = player => Console.WriteLine($"Player {player.GetName()} next turn");
+        Func<string, bool> validateWord = word => true;
+        Action<IPlayer> turnAdvanced = player => Console.WriteLine($"{player.GetName()}'s turn advanced.");
 
-        GameController game = new GameController(validation, onTurnAdvanced);
+        GameController game = new(validateWord, turnAdvanced);
         game.StartGame();
-        // game.AdvanceTurn();
+
+        Player player1 = new Player("Alice");
+        Player player2 = new Player("Bob");
+
         game.AdvanceTurn();
-        game.EndGame();
     }
 }

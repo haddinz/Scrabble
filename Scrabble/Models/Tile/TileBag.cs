@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 
 class TileBag : ITileBag {
-    public Queue<Tile> tiles = new();
+    public Queue<Tile> Tiles;
 
     public TileBag() {
+        Tiles = new Queue<Tile>();
+        InitializeStandardTiles();
     }
 
     public void InitializeStandardTiles() {
-        tiles = new Queue<Tile>();
+        Tiles = new Queue<Tile>();
         foreach (char letter in "ABCDEFGHIJKLMNOPQRSTUVWXYZ") {
             int value = 1;
             if ("AEIOULNRST".Contains(letter)){value = 1;}
@@ -20,7 +22,7 @@ class TileBag : ITileBag {
             if ("JX".Contains(letter)){value = 8;}
             if ("QZ".Contains(letter)){value = 10;}
             for (int i = 0; i < 2; i++) {
-                tiles.Enqueue(new Tile(letter, value, false));
+                Tiles.Enqueue(new Tile(letter, value, false));
             }
         }
     }
@@ -28,19 +30,21 @@ class TileBag : ITileBag {
     public List<Tile> DrawTiles(int count) {
         List<Tile> drawnTiles = new();
         for (int i = 0; i < count; i++) {
-            drawnTiles.Add(tiles.Dequeue());
+            if(Tiles.Count > 0) {
+                drawnTiles.Add(Tiles.Dequeue());
+            }
         }
         return drawnTiles;
     }
 
     public int TilesRemaining() {
-        return tiles.Count;
+        return Tiles.Count;
     }
 
     public void Shuffle() {
-        List<Tile> shuffledTiles = tiles.ToList();
+        List<Tile> shuffledTiles = Tiles.ToList();
         // shuffledTiles.Shuffle();
-        tiles = new Queue<Tile>(shuffledTiles);
+        Tiles = new Queue<Tile>(shuffledTiles);
     }
 
 }
