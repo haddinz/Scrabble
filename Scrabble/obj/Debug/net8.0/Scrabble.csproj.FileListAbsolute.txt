@@ -12,3 +12,4 @@ E:\Data Bootcamp\Scrabble\Scrabble\obj\Debug\net8.0\refint\Scrabble.dll
 E:\Data Bootcamp\Scrabble\Scrabble\obj\Debug\net8.0\Scrabble.pdb
 E:\Data Bootcamp\Scrabble\Scrabble\obj\Debug\net8.0\Scrabble.genruntimeconfig.cache
 E:\Data Bootcamp\Scrabble\Scrabble\obj\Debug\net8.0\ref\Scrabble.dll
+E:\Data Bootcamp\Scrabble\Scrabble\obj\Debug\net8.0\Scrabble.sourcelink.json

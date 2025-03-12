@@ -1,6 +1,6 @@
 class Position {
-    public int X;
-    public int Y;
+    public int X {get;}
+    public int Y {get;}
 
     public Position(int x, int y){
         this.X = x;
@@ -8,6 +8,6 @@ class Position {
     }
 
     public bool IsValid() {
-        return this.X >= 0 && this.Y >= 0;
+        return this.X >= 0 && this.X <= 15 && this.Y >= 0 && this.Y <= 15;
     }
 }

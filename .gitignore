@@ -1,0 +1,17 @@
+# START_CODE
+# Folder bin dan obj
+/bin/
+/obj/
+
+/*.exe
+/*.dll
+/*.pdb
+
+/packages/
+
+*.user
+
+*.log
+
+**/Thumbs.db
+**/Desktop.ini

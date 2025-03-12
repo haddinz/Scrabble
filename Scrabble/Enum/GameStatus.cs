@@ -2,5 +2,6 @@ enum GameStatus {
     NotStarted,
     InProgress,
     Paused,
-    Completed
+    Completed,
+    GameOver
 }
