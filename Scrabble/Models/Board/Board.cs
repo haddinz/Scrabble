@@ -1,4 +1,5 @@
 class Board : IBoard {
+
     private Cell[,] Grid;
     private bool FirstWorldPlaces;
 
@@ -16,7 +17,7 @@ class Board : IBoard {
     public void Render() {
         for (int i = 0; i < 15; i++) {
             for (int j = 0; j < 15; j++) {
-                Console.Write(Grid[i, j].IsOccupied ? Grid[i, j].Tile?.Letter : ".");
+                Console.Write(Grid[i, j].IsOccupied ? $"[{Grid[i, j].Tile?.Letter}]" : "[ ]");
             }
             Console.WriteLine();
         }

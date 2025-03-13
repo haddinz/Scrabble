@@ -1,7 +1,7 @@
 class Player : IPlayer{
     private string Name;
     private int Score;
-    public List<Tile>? Tiles{get; private set;}
+    public List<Tile>? Tiles{get; set;}
 
     public Player(string name){
         this.Name = name;

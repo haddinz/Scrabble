@@ -21,7 +21,15 @@ class GameController {
         this.CurrentPlayerIndex = 0;
     }
 
+    public void AddPlayer(IPlayer player){
+        this.Players.Add(player);
+        Console.WriteLine($"{player.GetName()} has been added to the game.");
+    }
+
     public void StartGame(){
+        if (Players == null || Players.Count == 0) {
+            throw new InvalidOperationException("Not enough players to start the game");
+        }
         this.Status = GameStatus.InProgress;
         Console.WriteLine("Game Started");
     }
@@ -31,7 +39,11 @@ class GameController {
             throw new InvalidOperationException("No players in the game");
         }
         this.CurrentPlayerIndex = (CurrentPlayerIndex + 1) % this.Players.Count;
-        this.OnTrunAdvanced(Players[CurrentPlayerIndex]);
+        // this.OnTrunAdvanced(Players[CurrentPlayerIndex]);
+    }
+
+    public IPlayer GetCurrentPlayer(){
+        return Players[CurrentPlayerIndex];
     }
 
     public void SwapTiles(IPlayer player, List<Tile> tiles){
@@ -39,6 +51,8 @@ class GameController {
             player.Tiles.Remove(tile);
             player.Tiles.Add(TileBag.DrawTiles(1).First());
         }
+
+        TileBag.DrawTiles(tiles.Count);
     }
 
     public void PassTurn(IPlayer player){
