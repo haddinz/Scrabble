@@ -23,12 +23,14 @@ class Program {
         //     Console.WriteLine($"Enter Player : {i}");
         //     string playerName = Console.ReadLine() ?? string.Empty;
         //     gameController.AddPlayer(new Player(playerName));
-        // }
-
-        // gameController.StartGame();
+        // }        
 
         gameController.AddPlayer(new Player("Player 1"));
         gameController.AddPlayer(new Player("Player 2"));
+
+        gameController.StartGame();        
+        bool isFirstInput = true;
+        bool isHorizontal = true;
 
         while(!gameController.IsGameOver()) {
             IPlayer currentPlayer = gameController.GetCurrentPlayer();
@@ -46,16 +48,25 @@ class Program {
             switch (choice)
             {
                 case "1":
-                    Console.Write("Enter the word want to place ");
+                    Console.Write("Enter the word : ");
                     string wordInput = Console.ReadLine()?.ToUpper() ?? string.Empty;
+                    
+                    int x;
+                    int y;
 
-                    Console.WriteLine("Enter startting position (X, Y) : ");
-                    string[] positionInput = Console.ReadLine()?.Split(",") ?? new string[0];
-                    int x = int.Parse(positionInput[0]);
-                    int y = int.Parse(positionInput[1]);
+                    if (isFirstInput) {
+                        x = 7;
+                        y = 7;
+                        isFirstInput = false;
+                    } else {
+                        Console.WriteLine("Enter startting position (X, Y) : ");
+                        string[] positionInput = Console.ReadLine()?.Split(",") ?? new string[0];
+                        x = int.Parse(positionInput[0]);
+                        y = int.Parse(positionInput[1]);
 
-                    Console.Write("Is the word horinzontal? (Y / N): ");
-                    bool isHorizontal = Console.ReadLine()?.ToUpper() == "Y";
+                        Console.Write("Is the word horinzontal? (Y / N): ");
+                        isHorizontal = Console.ReadLine()?.ToUpper() == "Y";
+                    }
 
                     List<Tile> tiles = new List<Tile>();
                     foreach (char letter in wordInput) {
@@ -65,9 +76,9 @@ class Program {
                     Word word = new Word(tiles, new Position(x, y), isHorizontal);
 
                     int score = gameController.PlaceWord(player, word);
-                    Console.WriteLine($"{player.GetName()} placed the word '{wordInput}' and scored {score} points.");
-
-                    gameController.RenderBoard();
+                    if(score > 0) {
+                        Console.WriteLine($"{player.GetName()} placed the word '{wordInput}' and scored {score} points.");
+                    }
 
                     break;
                 case "2":
@@ -99,9 +110,10 @@ class Program {
                     Console.WriteLine("Invalid choice. Please try again.");
                     continue;
             }
-        }
 
-        // gameController.AdvanceTurn();
+            gameController.RenderBoard();
+            gameController.AdvanceTurn();
+        }
 
         static int GetTileValue(char letter) {
             Dictionary<char, int> tileValue = new Dictionary<char, int>

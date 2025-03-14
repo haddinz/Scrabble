@@ -39,7 +39,6 @@ class GameController {
             throw new InvalidOperationException("No players in the game");
         }
         this.CurrentPlayerIndex = (CurrentPlayerIndex + 1) % this.Players.Count;
-        // this.OnTrunAdvanced(Players[CurrentPlayerIndex]);
     }
 
     public IPlayer GetCurrentPlayer(){
@@ -96,7 +95,17 @@ class GameController {
     }
     
     public int PlaceWord(IPlayer player, Word word){
-        if (!ValidateWordPlacement(word.ToString())) return 0;
+        if(!Board.ValidateWordPlacement(word)) {
+            Console.WriteLine("Invalid Word Placement.");
+            return 0;
+        };
+
+        if (Board.IsFirstWordPlaced() && !Board.IsAdjacentToExisting(word))
+        {
+            Console.WriteLine("New word must be adjacent to an existing word.");
+            return 0;
+        }
+        
         int score = this.Board.PlaceWorld(player, word);
         player.AddScore(score);
         return score;

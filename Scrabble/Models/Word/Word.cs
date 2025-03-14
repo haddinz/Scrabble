@@ -15,7 +15,7 @@ class Word {
 
     public List<Position> GetCoveredPositions(){
         List<Position> positions = new List<Position>();
-        for (int i =0; i < this.Tiles.Count; i++) {
+        for (int i = 0; i < this.Tiles.Count; i++) {
             int x = Start.X + (IsHorizontal ? i : 0);
             int y = Start.Y + (IsHorizontal ? 0 : i);
             positions.Add(new Position(x, y));
