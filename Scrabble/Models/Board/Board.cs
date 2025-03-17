@@ -76,7 +76,7 @@ class Board : IBoard {
     }
 
     public void Render() {
-        Console.Clear();
+        // Console.Clear();
 
         Console.Write("  ");
         for (int j = 0; j < 15; j++) {
@@ -221,12 +221,12 @@ class Board : IBoard {
         return true;
     }
 
-    public bool IsCentered(Word word)
-    {
-        return word.Start.X == 7 && word.Start.Y == 7;
-    }
+    // public bool IsCentered(Word word)
+    // {
+    //     return word.Start.X == 7 && word.Start.Y == 7;
+    // }
 
-    public bool IsValidOverlap(Word word) {
+    private bool IsValidOverlap(Word word) {
         List<Position> positions = word.GetCoveredPositions();
         foreach(var pos in positions) {
             if(Grid[pos.X, pos.Y].IsOccupied && Grid[pos.X, pos.Y].Tile?.Letter != word.Tiles[positions.IndexOf(pos)].Letter) {

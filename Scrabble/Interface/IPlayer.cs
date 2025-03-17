@@ -3,4 +3,7 @@ interface IPlayer {
     int GetScore();
     void AddScore(int score);
     List<Tile> Tiles{get;}
+
+    void DisplayRack();
+    void ShuffleRack();
 }

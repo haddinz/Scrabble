@@ -6,5 +6,5 @@ interface IBoard {
     bool IsFirstWordPlaced();
     bool ValidateWordPlacement(Word word);
     bool IsAdjacentToExisting(Word word);
-    bool IsCentered(Word word);
+    // bool IsCentered(Word word);
 }

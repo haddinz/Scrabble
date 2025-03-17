@@ -38,10 +38,13 @@ class Program {
             IPlayer currentPlayer = gameController.GetCurrentPlayer();  
             Console.WriteLine($"\n{currentPlayer.GetName()}'s turn. Score: {currentPlayer.GetScore()}");
 
+            currentPlayer.DisplayRack();
+
             Console.WriteLine("Choose an action:");
             Console.WriteLine("1. Place a word");
             Console.WriteLine("2. Pass Turn");
-            Console.WriteLine("3. Surender");
+            Console.WriteLine("3. Shuffle Rack");
+            Console.WriteLine("4. End Game");
             Console.Write("Enter your choice (1-3): ");
             string choice = Console.ReadLine() ?? string.Empty;
 
@@ -90,6 +93,10 @@ class Program {
                     break;
 
                 case "3":
+                    currentPlayer.ShuffleRack();
+                    break;
+
+                case "4":
                     Console.WriteLine($"{currentPlayer.GetName()} has surrendered. Game over!");
                     gameController.EndGame();
                     break;

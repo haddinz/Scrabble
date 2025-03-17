@@ -34,6 +34,8 @@ class GameController {
             throw new InvalidOperationException("Not enough players to start the game");
         }
         this.Status = GameStatus.InProgress;
+
+        Console.WriteLine(" ");
         Console.WriteLine("Game Started");
     }
 
@@ -86,9 +88,8 @@ class GameController {
     }
 
     public bool IsGameOver(){
-        // return this.TileBag.TilesRemaining() == 0 && this.Players.All(p => p.Tiles.Count == 0);
+        // return this.Status == GameStatus.Completed || this.ConsecutivePasses >= Players.Count;
         return this.Status == GameStatus.Completed;
-        // || this.ConsecutivePasses >= Players.Count;
     }
 
     public void CalculateFinalScore(){
@@ -123,10 +124,22 @@ class GameController {
     }
     
     public int PlaceWord(IPlayer player, Word word){
-        if(!Board.ValidateWordPlacement(word)) {
+        string wordString = new string(word.Tiles.Select(t => t.Letter).ToArray());
+
+        if(!Dictionary.IsValidWord(wordString)){
+            Console.WriteLine($"Invalid word: {wordString}");
+            return 0;
+        }
+
+        // if(!Board.ValidateWordPlacement(word)) {
+        //     Console.WriteLine("Invalid Word Placement.");
+        //     return 0;
+        // };
+
+        if(!ValidateWordPlacement(word)) {
             Console.WriteLine("Invalid Word Placement.");
             return 0;
-        };
+        }
 
         if (Board.IsFirstWordPlaced() && !Board.IsAdjacentToExisting(word))
         {
@@ -142,9 +155,10 @@ class GameController {
         return score;
     }
     
-    public bool ValidateWordPlacement(string word){
-        // return this.Board.IsValidPlacement(word) && this.Dictionary.IsValidWord(word);
-        return true;
+    public bool ValidateWordPlacement(Word word){
+        return this.Board.IsValidPlacement(word);
+        // && this.Dictionary.IsValidWord(word);
+        // return true;
     }
     
     public int CalculateWordScore(Word word) {
@@ -164,7 +178,7 @@ class GameController {
         return this.Board.IsAdjacentToExisting(word);
     }
     
-    public bool IsCentered(Word word) {
-        return this.Board.IsCentered(word);
-    }
+    // public bool IsCentered(Word word) {
+    //     return this.Board.IsCentered(word);
+    // }
 }
