@@ -41,11 +41,11 @@ class GameController {
         Console.WriteLine($"{player.GetName()} passed their turn.");
         ConsecutivePasses++;
 
-        if(this.ConsecutivePasses >= Players.Count){
-            Console.WriteLine("All players have passed consecutively. Ending the game.");
-            EndGame();
-            return;
-        }
+        // if(this.ConsecutivePasses >= Players.Count){
+        //     Console.WriteLine("All players have passed consecutively. Ending the game.");
+        //     EndGame();
+        //     return;
+        // }
 
         AdvanceTurn();
     }
@@ -56,6 +56,8 @@ class GameController {
         }
 
         this.CurrentPlayerIndex = (CurrentPlayerIndex + 1) % this.Players.Count;
+        Console.WriteLine($"Turn advanced to: {GetCurrentPlayer().GetName()}");
+
         this.OnTrunAdvanced?.Invoke(this.GetCurrentPlayer());
     }
 
@@ -85,7 +87,8 @@ class GameController {
 
     public bool IsGameOver(){
         // return this.TileBag.TilesRemaining() == 0 && this.Players.All(p => p.Tiles.Count == 0);
-        return this.Status == GameStatus.Completed || this.ConsecutivePasses >= Players.Count;
+        return this.Status == GameStatus.Completed;
+        // || this.ConsecutivePasses >= Players.Count;
     }
 
     public void CalculateFinalScore(){
@@ -105,9 +108,14 @@ class GameController {
         Console.WriteLine("Game ended!");
     }
     
-    public IPlayer GameWinner()
-    {
-        return Players.OrderByDescending(p => p.GetScore()).First();
+    public IPlayer GameWinner(){
+        var orderedPlayer = Players.OrderByDescending(p => p.GetScore()).ToList();
+        if (orderedPlayer.Count > 1 && orderedPlayer[0].GetScore() == orderedPlayer[1].GetScore()) {
+            Console.WriteLine("The Game Is Draw! ");
+            return null;
+        }
+
+        return orderedPlayer.First();
     }
 
     public void RenderBoard(){

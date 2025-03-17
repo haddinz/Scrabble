@@ -81,6 +81,8 @@ class Program {
                     if(score > 0) {
                         Console.WriteLine($"{currentPlayer.GetName()} placed the word '{wordInput}' and scored {score} points.");
                     }
+
+                    gameController.AdvanceTurn();
                     break;
 
                 case "2":
@@ -98,7 +100,6 @@ class Program {
             }
 
             gameController.RenderBoard();
-            gameController.AdvanceTurn();
         }
 
         Console.WriteLine("\nGame over!");

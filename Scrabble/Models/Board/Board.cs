@@ -92,16 +92,24 @@ class Board : IBoard {
                 } else {
                     switch(Grid[i, j].PremiumType) {
                         case PremiumSquareType.DL: 
+                            Console.ForegroundColor = ConsoleColor.Cyan;
                             Console.Write(" DL");
+                            Console.ResetColor();
                             break;
                         case PremiumSquareType.TL:
+                            Console.ForegroundColor = ConsoleColor.Red;
                             Console.Write(" TL");
+                            Console.ResetColor();
                             break;
                         case PremiumSquareType.DW:
+                            Console.ForegroundColor = ConsoleColor.Green;
                             Console.Write(" DW");
+                            Console.ResetColor();
                             break;
                         case PremiumSquareType.TW:
+                            Console.ForegroundColor = ConsoleColor.Yellow;
                             Console.Write(" TW");
+                            Console.ResetColor();
                             break;
 
                         default:
