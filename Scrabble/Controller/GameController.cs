@@ -1,5 +1,5 @@
 class GameController {
-    private Board Board;
+    private IBoard Board;
     private List<IPlayer> Players;
     private ITileBag TileBag;
     private IDictionary Dictionary;
@@ -7,6 +7,8 @@ class GameController {
     private GameStatus Status;
     private Func<string, bool> ValidateWord;
     private Action<IPlayer> OnTrunAdvanced;
+
+    private int ConsecutivePasses;
 
     public GameController(Func<string, bool> validation, Action<IPlayer> trunAdvanced){
         this.ValidateWord = validation;
@@ -19,6 +21,7 @@ class GameController {
         this.Status = GameStatus.NotStarted;
 
         this.CurrentPlayerIndex = 0;
+        this.ConsecutivePasses = 0;
     }
 
     public void AddPlayer(IPlayer player){
@@ -34,15 +37,36 @@ class GameController {
         Console.WriteLine("Game Started");
     }
 
+    public void PassTurn(IPlayer player){
+        Console.WriteLine($"{player.GetName()} passed their turn.");
+        ConsecutivePasses++;
+
+        if(this.ConsecutivePasses >= Players.Count){
+            Console.WriteLine("All players have passed consecutively. Ending the game.");
+            EndGame();
+            return;
+        }
+
+        AdvanceTurn();
+    }
+
     public void AdvanceTurn(){
-        if (Players == null || Players.Count == 0){
+        if (Players.Count == 0){
             throw new InvalidOperationException("No players in the game");
         }
+
         this.CurrentPlayerIndex = (CurrentPlayerIndex + 1) % this.Players.Count;
+        this.OnTrunAdvanced?.Invoke(this.GetCurrentPlayer());
     }
 
     public IPlayer GetCurrentPlayer(){
         return Players[CurrentPlayerIndex];
+    }
+
+    public void DisplayAllPlayerScores() {
+        foreach (var player in Players) {
+            Console.WriteLine($"{player.GetName()}: {player.GetScore()} points");
+        }
     }
 
     public void SwapTiles(IPlayer player, List<Tile> tiles){
@@ -54,18 +78,14 @@ class GameController {
         TileBag.DrawTiles(tiles.Count);
     }
 
-    public void PassTurn(IPlayer player){
-        Console.WriteLine($"{player.GetName()} passed their turn.");
-        AdvanceTurn();
-    }
-
     public bool ChallengeWord(IPlayer challenger){
         Console.WriteLine($"{challenger.GetName()} challenged the word.");
         return true;
     }
 
     public bool IsGameOver(){
-        return this.TileBag.TilesRemaining() == 0 && this.Players.All(p => p.Tiles.Count == 0);
+        // return this.TileBag.TilesRemaining() == 0 && this.Players.All(p => p.Tiles.Count == 0);
+        return this.Status == GameStatus.Completed || this.ConsecutivePasses >= Players.Count;
     }
 
     public void CalculateFinalScore(){
@@ -108,6 +128,9 @@ class GameController {
         
         int score = this.Board.PlaceWorld(player, word);
         player.AddScore(score);
+
+        this.ConsecutivePasses = 0;
+
         return score;
     }
     

@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Scrabble")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9c5dd1d1859c44adf7d41ea1e72dabf51f264f04")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e3c94672725a9c8af88d4297bd64cc74c0cc8fdf")]
 [assembly: System.Reflection.AssemblyProductAttribute("Scrabble")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Scrabble")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

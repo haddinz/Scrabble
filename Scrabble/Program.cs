@@ -33,17 +33,19 @@ class Program {
         bool isHorizontal = true;
 
         while(!gameController.IsGameOver()) {
-            IPlayer currentPlayer = gameController.GetCurrentPlayer();
+            gameController.DisplayAllPlayerScores();  
+
+            IPlayer currentPlayer = gameController.GetCurrentPlayer();  
             Console.WriteLine($"\n{currentPlayer.GetName()}'s turn. Score: {currentPlayer.GetScore()}");
 
             Console.WriteLine("Choose an action:");
             Console.WriteLine("1. Place a word");
-            Console.WriteLine("2. Swap tiles");
-            Console.WriteLine("3. Pass turn");
+            Console.WriteLine("2. Pass Turn");
+            Console.WriteLine("3. Surender");
             Console.Write("Enter your choice (1-3): ");
             string choice = Console.ReadLine() ?? string.Empty;
 
-            IPlayer player = gameController.GetCurrentPlayer();
+            // IPlayer player = gameController.GetCurrentPlayer();
 
             switch (choice)
             {
@@ -55,14 +57,14 @@ class Program {
                     int y;
 
                     if (isFirstInput) {
-                        x = 7;
-                        y = 7;
+                        x = 6;
+                        y = 6;
                         isFirstInput = false;
                     } else {
                         Console.WriteLine("Enter startting position (X, Y) : ");
                         string[] positionInput = Console.ReadLine()?.Split(",") ?? new string[0];
-                        x = int.Parse(positionInput[0]);
-                        y = int.Parse(positionInput[1]);
+                        x = int.Parse(positionInput[0]) - 1;
+                        y = int.Parse(positionInput[1]) - 1;
 
                         Console.Write("Is the word horinzontal? (Y / N): ");
                         isHorizontal = Console.ReadLine()?.ToUpper() == "Y";
@@ -75,37 +77,21 @@ class Program {
 
                     Word word = new Word(tiles, new Position(x, y), isHorizontal);
 
-                    int score = gameController.PlaceWord(player, word);
+                    int score = gameController.PlaceWord(currentPlayer, word);
                     if(score > 0) {
-                        Console.WriteLine($"{player.GetName()} placed the word '{wordInput}' and scored {score} points.");
+                        Console.WriteLine($"{currentPlayer.GetName()} placed the word '{wordInput}' and scored {score} points.");
                     }
-
                     break;
+
                 case "2":
-
-                    Console.WriteLine("Enter the letters of the tiles of swap : ");
-                    string tilesToSwapInput = Console.ReadLine()?.ToUpper() ?? string.Empty;
-
-                    List<Tile> tilesToSwap = new List<Tile>();
-                    foreach(char letter in tilesToSwapInput) {
-                        Tile? tile = player.Tiles.FirstOrDefault(t => t.Letter == letter);
-                        if (tile != null) {
-                            tilesToSwap.Add(tile);
-                        }
-
-                    }
-                    
-                    if (tilesToSwap.Count > 0) {
-                        gameController.SwapTiles(player, tilesToSwap);
-                        Console.WriteLine($"{player.GetName()} swapped tiles. ");
-                    } else {
-                        Console.WriteLine("No valid tiles to swap");
-                    }
-
-                    break;
-                case "3":
                     gameController.PassTurn(currentPlayer);
                     break;
+
+                case "3":
+                    Console.WriteLine($"{currentPlayer.GetName()} has surrendered. Game over!");
+                    gameController.EndGame();
+                    break;
+
                 default:
                     Console.WriteLine("Invalid choice. Please try again.");
                     continue;
@@ -114,6 +100,11 @@ class Program {
             gameController.RenderBoard();
             gameController.AdvanceTurn();
         }
+
+        Console.WriteLine("\nGame over!");
+        gameController.CalculateFinalScore();
+        IPlayer winner = gameController.GameWinner();
+        Console.WriteLine($"{winner.GetName()} wins with {winner.GetScore()} points!");
 
         static int GetTileValue(char letter) {
             Dictionary<char, int> tileValue = new Dictionary<char, int>

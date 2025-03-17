@@ -12,6 +12,67 @@ class Board : IBoard {
         }
 
         this.FirstWorldPlaces = false;
+
+        // Double Letter (DL)
+        Grid[3, 0].PremiumType = PremiumSquareType.DL;
+        Grid[11, 0].PremiumType = PremiumSquareType.DL;
+        Grid[6, 2].PremiumType = PremiumSquareType.DL;
+        Grid[8, 2].PremiumType = PremiumSquareType.DL;
+        Grid[0, 3].PremiumType = PremiumSquareType.DL;
+        Grid[7, 3].PremiumType = PremiumSquareType.DL;
+        Grid[14, 3].PremiumType = PremiumSquareType.DL;
+        Grid[2, 6].PremiumType = PremiumSquareType.DL;
+        Grid[6, 6].PremiumType = PremiumSquareType.DL;
+        Grid[8, 6].PremiumType = PremiumSquareType.DL;
+        Grid[12, 6].PremiumType = PremiumSquareType.DL;
+        Grid[3, 7].PremiumType = PremiumSquareType.DL;
+        Grid[11, 7].PremiumType = PremiumSquareType.DL;
+        Grid[2, 8].PremiumType = PremiumSquareType.DL;
+        Grid[6, 8].PremiumType = PremiumSquareType.DL;
+        Grid[8, 8].PremiumType = PremiumSquareType.DL;
+        Grid[12, 8].PremiumType = PremiumSquareType.DL;
+        Grid[0, 11].PremiumType = PremiumSquareType.DL;
+        Grid[7, 11].PremiumType = PremiumSquareType.DL;
+        Grid[14, 11].PremiumType = PremiumSquareType.DL;
+        Grid[6, 12].PremiumType = PremiumSquareType.DL;
+        Grid[8, 12].PremiumType = PremiumSquareType.DL;
+        Grid[3, 14].PremiumType = PremiumSquareType.DL;
+        Grid[11, 14].PremiumType = PremiumSquareType.DL;
+
+        // Triple Letter (TL)
+        Grid[5, 1].PremiumType = PremiumSquareType.TL;
+        Grid[9, 1].PremiumType = PremiumSquareType.TL;
+        Grid[1, 5].PremiumType = PremiumSquareType.TL;
+        Grid[5, 5].PremiumType = PremiumSquareType.TL;
+        Grid[9, 5].PremiumType = PremiumSquareType.TL;
+        Grid[13, 5].PremiumType = PremiumSquareType.TL;
+        Grid[1, 9].PremiumType = PremiumSquareType.TL;
+        Grid[5, 9].PremiumType = PremiumSquareType.TL;
+        Grid[9, 9].PremiumType = PremiumSquareType.TL;
+        Grid[13, 9].PremiumType = PremiumSquareType.TL;
+        Grid[5, 13].PremiumType = PremiumSquareType.TL;
+        Grid[9, 13].PremiumType = PremiumSquareType.TL;
+
+        // Double Word (DW)
+        Grid[1, 1].PremiumType = PremiumSquareType.DW;
+        Grid[2, 2].PremiumType = PremiumSquareType.DW;
+        Grid[3, 3].PremiumType = PremiumSquareType.DW;
+        Grid[4, 4].PremiumType = PremiumSquareType.DW;
+        Grid[10, 10].PremiumType = PremiumSquareType.DW;
+        Grid[11, 11].PremiumType = PremiumSquareType.DW;
+        Grid[12, 12].PremiumType = PremiumSquareType.DW;
+        Grid[13, 13].PremiumType = PremiumSquareType.DW;
+        Grid[14, 14].PremiumType = PremiumSquareType.DW;
+
+        // Triple Word (TW)
+        Grid[0, 0].PremiumType = PremiumSquareType.TW;
+        Grid[7, 0].PremiumType = PremiumSquareType.TW;
+        Grid[14, 0].PremiumType = PremiumSquareType.TW;
+        Grid[0, 7].PremiumType = PremiumSquareType.TW;
+        Grid[14, 7].PremiumType = PremiumSquareType.TW;
+        Grid[0, 14].PremiumType = PremiumSquareType.TW;
+        Grid[7, 14].PremiumType = PremiumSquareType.TW;
+        Grid[14, 14].PremiumType = PremiumSquareType.TW;
     }
 
     public void Render() {
@@ -27,19 +88,55 @@ class Board : IBoard {
             Console.Write($"{ i + 1, 2}");
             for (int j = 0; j < 15; j++) {
                 if (Grid[i, j].IsOccupied) {
-                    Console.Write($"[{Grid[i, j].Tile?.Letter}]");
+                    Console.Write($" {Grid[i, j].Tile?.Letter} ");
                 } else {
-                    Console.Write("[ ]");
+                    switch(Grid[i, j].PremiumType) {
+                        case PremiumSquareType.DL: 
+                            Console.Write(" DL");
+                            break;
+                        case PremiumSquareType.TL:
+                            Console.Write(" TL");
+                            break;
+                        case PremiumSquareType.DW:
+                            Console.Write(" DW");
+                            break;
+                        case PremiumSquareType.TW:
+                            Console.Write(" TW");
+                            break;
+
+                        default:
+                            Console.Write(" . ");
+                            break;
+                    }
                 }
             }
             Console.WriteLine();
         }
     }
 
+    public bool IsValidPosition(int x, int y){
+        return x >= 0 && x < 15 && y >= 0 && y < 15;
+    }
+
     public int PlaceWorld(IPlayer player, Word word) {
         int score = 0;
+        int wordMultiplier = 1;
 
-        if(!this.FirstWorldPlaces && !word.GetCoveredPositions().Any(p => p.X == 7 && p.Y == 7)) {
+        List<Position> position = word.GetCoveredPositions();
+
+        foreach (var pos in position){
+            if (!IsValidPosition(pos.X, pos.Y)){
+                Console.WriteLine("Invalid position. The word goes out of bounds.");
+                return 0;
+            }
+        }
+
+        if (!IsValidOverlap(word)){
+            Console.WriteLine("Invalid placement. The word overlaps with existing tiles in an invalid way.");
+            return 0;
+        }
+
+        if(!this.FirstWorldPlaces && !word.GetCoveredPositions().Any(p => p.X == 6 && p.Y == 6)) {
             Console.WriteLine("First word must cover the center position (7, 7).");
             return 0;
         }
@@ -49,7 +146,6 @@ class Board : IBoard {
             return 0;
         }
 
-        List<Position> position = word.GetCoveredPositions();
         for(int i = 0; i < word.Tiles.Count; i++) {
             Position pos = position[i];
             Grid[pos.X, pos.Y].PlaceTile(word.Tiles[i]);
@@ -57,11 +153,37 @@ class Board : IBoard {
 
         this.FirstWorldPlaces = true;
 
-        foreach(var tile in word.Tiles) {
-            score += tile.Value;
+        // foreach(var tile in word.Tiles) {
+        //     score += tile.Value;
+        // }
+
+        for (int i = 0; i < word.Tiles.Count; i++) {
+            Position pos = position[i];
+            int tileScore = word.Tiles[i].Value;
+
+            switch(Grid[pos.X, pos.Y].PremiumType) {
+                case PremiumSquareType.DL:
+                    tileScore += 2;
+                    break;
+
+                case PremiumSquareType.TL:
+                tileScore *= 3;
+                break;
+            }
+
+            switch (Grid[pos.X, pos.Y].PremiumType){
+                case PremiumSquareType.DW:
+                    wordMultiplier *= 2;
+                    break;
+                case PremiumSquareType.TW:
+                    wordMultiplier *= 3;
+                    break;
+            }
+
+            score += tileScore;
         }
 
-        return score;
+        return score * wordMultiplier;
     }
 
     public Cell GetCell(int x, int y) => Grid[x, y];
@@ -94,5 +216,16 @@ class Board : IBoard {
     public bool IsCentered(Word word)
     {
         return word.Start.X == 7 && word.Start.Y == 7;
+    }
+
+    public bool IsValidOverlap(Word word) {
+        List<Position> positions = word.GetCoveredPositions();
+        foreach(var pos in positions) {
+            if(Grid[pos.X, pos.Y].IsOccupied && Grid[pos.X, pos.Y].Tile?.Letter != word.Tiles[positions.IndexOf(pos)].Letter) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

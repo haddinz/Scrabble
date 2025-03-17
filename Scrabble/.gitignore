@@ -1,0 +1,60 @@
+# Ignore Visual Studio and Rider IDE files
+.vs/
+.idea/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Ignore build outputs
+bin/
+obj/
+out/
+
+# Ignore package dependencies
+packages/
+*.nupkg
+*.snupkg
+project.lock.json
+project.assets.json
+
+# Ignore build artifacts
+*.dll
+*.exe
+*.pdb
+*.log
+*.cache
+*.ilk
+*.ilk
+*.exp
+*.idb
+*.lib
+
+# Ignore temporary files
+*.tmp
+*.temp
+*.bak
+*.swp
+*.swo
+*.sln*
+*.DS_Store
+Thumbs.db
+
+# Ignore Rider & Resharper files
+*.DotSettings.user
+.idea/
+
+# Ignore test coverage files
+coverage/
+*.coverage
+*.testresults
+*.trx
+TestResults/
+
+# Ignore application config files
+appsettings.json
+appsettings.Development.json
+
+# Ignore JetBrains Rider files
+.idea/
+*.sln.iml
