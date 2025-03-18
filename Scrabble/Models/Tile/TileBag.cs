@@ -7,10 +7,10 @@ class TileBag : ITileBag {
 
     public TileBag() {
         Tiles = new Queue<Tile>();
-        InitializeStandardTiles();
+        Shuffle();
     }
 
-    public void InitializeStandardTiles() {
+    private void InitializeStandardTiles() {
         Tiles = new Queue<Tile>();
         var tileDistribution = new Dictionary<char, int> {
             { 'A', 9 }, { 'B', 2 }, { 'C', 2 }, { 'D', 4 }, { 'E', 12 },
@@ -21,32 +21,28 @@ class TileBag : ITileBag {
             { 'Z', 1 }
         };
 
-        foreach(var entry in tileDistribution) {
-            for(int i = 0; i < entry.Value; i++) {
-                Tiles.Enqueue(new Tile(entry.Key, GetTileValue(entry.Key)));
-            }
-        }
-
-        // foreach (char letter in "ABCDEFGHIJKLMNOPQRSTUVWXYZ") {
-        //     int value = 1;
-        //     if ("AEIOULNRST".Contains(letter)){value = 1;}
-        //     if ("DG".Contains(letter)){value = 2;}
-        //     if ("BCMP".Contains(letter)){value = 3;}
-        //     if ("FHVWY".Contains(letter)){value = 4;}
-        //     if ("K".Contains(letter)){value = 5;}
-        //     if ("JX".Contains(letter)){value = 8;}
-        //     if ("QZ".Contains(letter)){value = 10;}
-        //     for (int i = 0; i < 2; i++) {
-        //         Tiles.Enqueue(new Tile(letter, value, false));
+        // foreach(var entry in tileDistribution) {
+        //     for(int i = 0; i < entry.Value; i++) {
+        //         Tiles.Enqueue(new Tile(entry.Key, GetTileValue(entry.Key)));
         //     }
         // }
 
+        foreach(var entry in tileDistribution) {
+            for(int i = 0; i < entry.Value; i++) {
+                Tiles.Enqueue(new Tile(entry.Key));
+            }
+        }
+
+        // for(int i = 0; i < 2; i++) {
+        //     Tiles.Enqueue(new Tile(' ', 0, true));
+        // }
+
         for(int i = 0; i < 2; i++) {
-            Tiles.Enqueue(new Tile(' ', 0, true));
+            Tiles.Enqueue(new Tile(' ', true));
         }
     }
 
-    private int GetTileValue(char letter) {
+    public int GetTileValue(char letter) {
         var tileValues = new Dictionary<char, int> {
             { 'A', 1 }, { 'B', 3 }, { 'C', 3 }, { 'D', 2 }, { 'E', 1 },
             { 'F', 4 }, { 'G', 2 }, { 'H', 4 }, { 'I', 1 }, { 'J', 8 },
@@ -74,6 +70,8 @@ class TileBag : ITileBag {
     }
 
     public void Shuffle() {
+        InitializeStandardTiles();
+
         var random = new Random();
         var tileList = Tiles.ToList();
         for (int i = tileList.Count - 1; i > 0; i--) {

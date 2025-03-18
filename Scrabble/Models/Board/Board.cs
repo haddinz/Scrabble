@@ -73,10 +73,26 @@ class Board : IBoard {
         Grid[0, 14].PremiumType = PremiumSquareType.TW;
         Grid[7, 14].PremiumType = PremiumSquareType.TW;
         Grid[14, 14].PremiumType = PremiumSquareType.TW;
+
+        PlaceFisrtWord();
+    }
+
+    private void PlaceFisrtWord(){
+        string firstWord = "LEARN";
+        int startX = 7 - (firstWord.Length / 2);
+        int startY = 7;
+
+        for(int i = 0; i < firstWord.Length; i++) {
+            // Grid[startX + i, startY].Tile = new Tile(firstWord[i], firstWord[i]);
+            Grid[startX + i, startY].Tile = new Tile(firstWord[i]);
+            Grid[startX + i, startY].IsOccupied = true;
+        }
+
+        this.FirstWorldPlaces = true;
     }
 
     public void Render() {
-        // Console.Clear();
+        Console.Clear();
 
         Console.Write("  ");
         for (int j = 0; j < 15; j++) {

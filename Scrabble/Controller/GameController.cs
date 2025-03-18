@@ -24,19 +24,18 @@ class GameController {
         this.ConsecutivePasses = 0;
     }
 
-    public void AddPlayer(IPlayer player){
-        this.Players.Add(player);
-        Console.WriteLine($"{player.GetName()} has been added to the game.");
-    }
-
     public void StartGame(){
-        if (Players == null || Players.Count == 0) {
-            throw new InvalidOperationException("Not enough players to start the game");
-        }
+        Players.Add(new Player("Player 1"));
+        Players.Add(new Player("Player 2"));
+
         this.Status = GameStatus.InProgress;
 
-        Console.WriteLine(" ");
+        foreach (var player in Players) {
+            player.Tiles = TileBag.DrawTiles(7);
+        }
+        
         Console.WriteLine("Game Started");
+        Console.WriteLine(" ");
     }
 
     public void PassTurn(IPlayer player){
@@ -95,9 +94,13 @@ class GameController {
     public void CalculateFinalScore(){
         foreach (var player in Players)
         {
-            int penalty = player.Tiles.Sum(t => t.Value);
-            player.AddScore(-penalty);
+            // int penalty = player.Tiles.Sum(t => t.Value);
+            // player.AddScore(-penalty);
+            if (player.GetScore() < 0) {
+                player.AddScore(-player.GetScore());
+            }
         }    
+        
     }
 
     public GameStatus GetStatus(){
@@ -108,6 +111,18 @@ class GameController {
         this.Status = GameStatus.Completed;
         Console.WriteLine("Game ended!");
     }
+
+    // public void EndGame(IPlayer endingPlayer){
+    //     this.Status = GameStatus.Completed;
+    //     Console.WriteLine($"{endingPlayer.GetName()} has ended the game!");
+    //     Console.WriteLine("Game ended!");
+
+    //     // Determine the winner as the opposite player
+    //     IPlayer winner = Players.FirstOrDefault(p => p != endingPlayer);
+    //     if (winner != null) {
+    //         Console.WriteLine($"{winner.GetName()} wins by default!");
+    //     }
+    // }
     
     public IPlayer GameWinner(){
         var orderedPlayer = Players.OrderByDescending(p => p.GetScore()).ToList();
@@ -141,8 +156,7 @@ class GameController {
             return 0;
         }
 
-        if (Board.IsFirstWordPlaced() && !Board.IsAdjacentToExisting(word))
-        {
+        if (Board.IsFirstWordPlaced() && !Board.IsAdjacentToExisting(word)){
             Console.WriteLine("New word must be adjacent to an existing word.");
             return 0;
         }
@@ -178,7 +192,7 @@ class GameController {
         return this.Board.IsAdjacentToExisting(word);
     }
     
-    // public bool IsCentered(Word word) {
-    //     return this.Board.IsCentered(word);
-    // }
+    public bool IsCentered(Word word) {
+        return true;
+    }
 }
