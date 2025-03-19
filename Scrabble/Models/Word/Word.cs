@@ -23,8 +23,4 @@ class Word {
 
         return positions;
     }
-
-    public override string ToString(){
-        return new string(Tiles.Select(t => t.Letter).ToArray());
-    }
 }

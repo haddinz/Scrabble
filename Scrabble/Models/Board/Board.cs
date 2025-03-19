@@ -92,8 +92,6 @@ class Board : IBoard {
     }
 
     public void Render() {
-        Console.Clear();
-
         Console.Write("  ");
         for (int j = 0; j < 15; j++) {
             Console.Write((j + 1).ToString().PadLeft(2) + " ");
@@ -138,10 +136,6 @@ class Board : IBoard {
         }
     }
 
-    public bool IsValidPosition(int x, int y){
-        return x >= 0 && x < 15 && y >= 0 && y < 15;
-    }
-
     public int PlaceWorld(IPlayer player, Word word) {
         int score = 0;
         int wordMultiplier = 1;
@@ -165,21 +159,12 @@ class Board : IBoard {
             return 0;
         }
 
-        if(FirstWorldPlaces && !IsAdjacentToExisting(word)) {
-            Console.WriteLine("New word must be adjacent to an existing word.");
-            return 0;
-        }
-
         for(int i = 0; i < word.Tiles.Count; i++) {
             Position pos = position[i];
             Grid[pos.X, pos.Y].PlaceTile(word.Tiles[i]);
         }
 
         this.FirstWorldPlaces = true;
-
-        // foreach(var tile in word.Tiles) {
-        //     score += tile.Value;
-        // }
 
         for (int i = 0; i < word.Tiles.Count; i++) {
             Position pos = position[i];
@@ -212,8 +197,7 @@ class Board : IBoard {
 
     public Cell GetCell(int x, int y) => Grid[x, y];
 
-    public bool IsValidPlacement(Word word)
-    {
+    public bool IsValidPlacement(Word word){
         return true;
     }
 
@@ -233,15 +217,6 @@ class Board : IBoard {
         return this.FirstWorldPlaces;
     }
 
-    public bool ValidateWordPlacement(Word word){
-        return true;
-    }
-
-    // public bool IsCentered(Word word)
-    // {
-    //     return word.Start.X == 7 && word.Start.Y == 7;
-    // }
-
     private bool IsValidOverlap(Word word) {
         List<Position> positions = word.GetCoveredPositions();
         foreach(var pos in positions) {
@@ -252,4 +227,9 @@ class Board : IBoard {
 
         return true;
     }
+
+    private bool IsValidPosition(int x, int y){
+        return x >= 0 && x < 15 && y >= 0 && y < 15;
+    }
+
 }

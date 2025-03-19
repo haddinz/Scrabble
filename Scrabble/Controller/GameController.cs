@@ -5,10 +5,8 @@ class GameController {
     private IDictionary Dictionary;
     private int CurrentPlayerIndex;
     private GameStatus Status;
-    private Func<string, bool> ValidateWord;
+    private Func<string, bool> ValidateWord; 
     private Action<IPlayer> OnTrunAdvanced;
-
-    private int ConsecutivePasses;
 
     public GameController(Func<string, bool> validation, Action<IPlayer> trunAdvanced){
         this.ValidateWord = validation;
@@ -21,7 +19,6 @@ class GameController {
         this.Status = GameStatus.NotStarted;
 
         this.CurrentPlayerIndex = 0;
-        this.ConsecutivePasses = 0;
     }
 
     public void StartGame(){
@@ -40,13 +37,6 @@ class GameController {
 
     public void PassTurn(IPlayer player){
         Console.WriteLine($"{player.GetName()} passed their turn.");
-        ConsecutivePasses++;
-
-        // if(this.ConsecutivePasses >= Players.Count){
-        //     Console.WriteLine("All players have passed consecutively. Ending the game.");
-        //     EndGame();
-        //     return;
-        // }
 
         AdvanceTurn();
     }
@@ -73,29 +63,47 @@ class GameController {
     }
 
     public void SwapTiles(IPlayer player, List<Tile> tiles){
-        foreach(var tile in tiles){
-            player.Tiles.Remove(tile);
-            player.Tiles.Add(TileBag.DrawTiles(1).First());
+        if (TileBag.TilesRemaining() < tiles.Count){
+            Console.WriteLine("Not enough tiles in the bag to swap.");
+            Console.WriteLine();
+            return;
         }
 
-        TileBag.DrawTiles(tiles.Count);
+        foreach (var tile in tiles) {
+            if(!player.Tiles.Contains(tile)) {
+                Console.WriteLine($"Tile '{tile.Letter}' is not in your rack. Please enter valid tiles to swap.");
+                Console.WriteLine();
+                return;
+            }
+        }
+
+        foreach (var tile in tiles) {
+            player.Tiles.Remove(tile);
+        }
+
+        foreach (var tile in tiles) {
+            TileBag.ReturnTiles(tile);
+        }
+
+        List<Tile> newTiles = TileBag.DrawTiles(tiles.Count);
+        player.Tiles.AddRange(newTiles);
+        Console.WriteLine($"{player.GetName()} swapped {tiles.Count} tiles.");
+        Console.WriteLine();
     }
 
     public bool ChallengeWord(IPlayer challenger){
         Console.WriteLine($"{challenger.GetName()} challenged the word.");
+        Console.WriteLine();
         return true;
     }
 
     public bool IsGameOver(){
-        // return this.Status == GameStatus.Completed || this.ConsecutivePasses >= Players.Count;
         return this.Status == GameStatus.Completed;
     }
 
     public void CalculateFinalScore(){
         foreach (var player in Players)
         {
-            // int penalty = player.Tiles.Sum(t => t.Value);
-            // player.AddScore(-penalty);
             if (player.GetScore() < 0) {
                 player.AddScore(-player.GetScore());
             }
@@ -112,18 +120,6 @@ class GameController {
         Console.WriteLine("Game ended!");
     }
 
-    // public void EndGame(IPlayer endingPlayer){
-    //     this.Status = GameStatus.Completed;
-    //     Console.WriteLine($"{endingPlayer.GetName()} has ended the game!");
-    //     Console.WriteLine("Game ended!");
-
-    //     // Determine the winner as the opposite player
-    //     IPlayer winner = Players.FirstOrDefault(p => p != endingPlayer);
-    //     if (winner != null) {
-    //         Console.WriteLine($"{winner.GetName()} wins by default!");
-    //     }
-    // }
-    
     public IPlayer GameWinner(){
         var orderedPlayer = Players.OrderByDescending(p => p.GetScore()).ToList();
         if (orderedPlayer.Count > 1 && orderedPlayer[0].GetScore() == orderedPlayer[1].GetScore()) {
@@ -139,53 +135,78 @@ class GameController {
     }
     
     public int PlaceWord(IPlayer player, Word word){
-        string wordString = new string(word.Tiles.Select(t => t.Letter).ToArray());
+        string wordString = new string(word.Tiles.Select(t => t.Letter).ToArray());               
 
-        if(!Dictionary.IsValidWord(wordString)){
+        if(!ValidateWord(wordString)){
+            Console.WriteLine();
             Console.WriteLine($"Invalid word: {wordString}");
             return 0;
         }
 
-        // if(!Board.ValidateWordPlacement(word)) {
-        //     Console.WriteLine("Invalid Word Placement.");
-        //     return 0;
-        // };
-
-        if(!ValidateWordPlacement(word)) {
-            Console.WriteLine("Invalid Word Placement.");
-            return 0;
-        }
-
-        if (Board.IsFirstWordPlaced() && !Board.IsAdjacentToExisting(word)){
-            Console.WriteLine("New word must be adjacent to an existing word.");
+        if (!IsValidPlacement(word)) {
+            Console.WriteLine();
+            Console.WriteLine("Invalid word placement.");
             return 0;
         }
         
-        int score = this.Board.PlaceWorld(player, word);
+        int score = CalculateWordScore(player ,word);
         player.AddScore(score);
-
-        this.ConsecutivePasses = 0;
-
         return score;
     }
     
     public bool ValidateWordPlacement(Word word){
-        return this.Board.IsValidPlacement(word);
-        // && this.Dictionary.IsValidWord(word);
-        // return true;
+        return true;
     }
     
-    public int CalculateWordScore(Word word) {
-        int score = word.Tiles.Sum(t => t.Value);
-        return ApplyPremiumMultipliers(word, score);
-    }
+    public int CalculateWordScore(IPlayer player, Word word) {
+        int score = this.Board.PlaceWorld(player, word);
 
-    public int ApplyPremiumMultipliers(Word word, int score) {
         return score;
     }
 
+    public int ApplyPremiumMultipliers(Word word) {
+    int wordScore = 0; 
+    int wordMultiplier = 1; 
+
+    foreach (var position in word.GetCoveredPositions()) {
+        Cell cell = Board.GetCell(position.X, position.Y);
+        int tileValue = cell.Tile.Value; 
+
+        switch (cell.PremiumType) {
+            case PremiumSquareType.DL: 
+                tileValue *= 2;
+                break;
+            case PremiumSquareType.TL: 
+                tileValue *= 3;
+                break;
+            case PremiumSquareType.DW: 
+                wordMultiplier *= 2;
+                break;
+            case PremiumSquareType.TW: 
+                wordMultiplier *= 3;
+                break;
+        }
+
+        wordScore += tileValue; 
+    }
+
+    return wordScore * wordMultiplier;
+}
+
     public bool IsValidPlacement(Word word) {
-        return this.Board.IsValidPlacement(word);
+        if (word.IsHorizontal && (word.Start.X + word.Tiles.Count > 15)) {
+            return false;
+        }
+
+        if (word.IsHorizontal && (word.Start.Y + word.Tiles.Count > 15)) {
+            return false;
+        }
+
+        if(Board.IsFirstWordPlaced() && !Board.IsAdjacentToExisting(word)) {
+            return false;
+        }
+
+        return true;
     }
 
     public bool IsAdjacentToExisting(Word word) {

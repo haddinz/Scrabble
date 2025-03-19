@@ -3,7 +3,10 @@ class Program {
 
     static void Main() {
 
-        Func<string, bool> validateWord = word => true;
+        Func<string, bool> validateWord = word => {
+            return new Dictionary().IsValidWord(word);
+        };
+
         Action<IPlayer> turnAdvanced = player => Console.WriteLine($"{player.GetName()}'s turn advanced.");
 
         GameController gameController = new(validateWord, turnAdvanced);
@@ -26,9 +29,11 @@ class Program {
             Console.WriteLine("1. Place a word");
             Console.WriteLine("2. Pass Turn");
             Console.WriteLine("3. Shuffle Rack");
-            Console.WriteLine("4. End Game");
+            Console.WriteLine("4. Swap Tiles");
+            Console.WriteLine("5. End Game");
             Console.Write("Enter your choice (1-4): ");
             string choice = Console.ReadLine() ?? string.Empty;
+            Console.WriteLine($"Game Status: {gameController.GetStatus()}");
 
             switch (choice)
             {
@@ -46,9 +51,6 @@ class Program {
 
                     TileBag tileBag = new();
                     List<Tile> tiles = new List<Tile>();
-                    // foreach (char letter in wordInput) {
-                    //     tiles.Add(new Tile(letter, tileBag.GetTileValue(letter), false));
-                    // }
 
                     foreach (char letter in wordInput) {
                         tiles.Add(new Tile(letter, false));
@@ -73,7 +75,31 @@ class Program {
                     break;
 
                 case "4":
-                    // gameController.EndGame(currentPlayer);
+                    Console.Write("Enter the letter to swap = ");
+                    string letterToSwap = Console.ReadLine()?.ToUpper() ?? string.Empty;
+
+                    List<Tile> tilesToSwap = new List<Tile>();
+                    foreach (char letter in letterToSwap) {
+                        Tile tile = currentPlayer.Tiles.FirstOrDefault(t => t.Letter == letter);
+                        if(tile != null) {
+                            tilesToSwap.Add(tile);
+                        } else {
+                            Console.WriteLine($"Tile '{letter}' is not in your rack. Please enter valid tiles to swap.");
+                            tilesToSwap.Clear();
+                            break;
+                        }
+                    }
+
+                    if (tilesToSwap.Count > 0) {
+                        gameController.SwapTiles(currentPlayer, tilesToSwap);
+                    } else {
+                        Console.WriteLine("No valid tiles selected to swap.");
+                    }
+
+                    gameController.PassTurn(currentPlayer);
+                    break;
+                    
+                case "5":
                     gameController.EndGame();
                     break;
 
