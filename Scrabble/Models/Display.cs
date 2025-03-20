@@ -41,7 +41,7 @@ class Display : IDisplay{
                                                                                     
         ");
         Console.ResetColor();
-        this.SetMessage("Version 1.0 | Created by Hajrul");
+        this.SetMessage("Version 1.0 Scrabble Game");
         this.SetMessage("-----------------------------------");
         this.SetMessage("Instructions:");
         this.SetMessage("1. Enter your word to calculate its score.");
