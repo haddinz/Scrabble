@@ -120,7 +120,7 @@ class GameController {
         Console.WriteLine("Game ended!");
     }
 
-    public IPlayer GameWinner(){
+    public IPlayer? GameWinner(){
         var orderedPlayer = Players.OrderByDescending(p => p.GetScore()).ToList();
         if (orderedPlayer.Count > 1 && orderedPlayer[0].GetScore() == orderedPlayer[1].GetScore()) {
             Console.WriteLine("The Game Is Draw! ");
@@ -155,6 +155,7 @@ class GameController {
     }
     
     public bool ValidateWordPlacement(Word word){
+        // was successfully managed by delegate
         return true;
     }
     
@@ -163,35 +164,6 @@ class GameController {
 
         return score;
     }
-
-    public int ApplyPremiumMultipliers(Word word) {
-    int wordScore = 0; 
-    int wordMultiplier = 1; 
-
-    foreach (var position in word.GetCoveredPositions()) {
-        Cell cell = Board.GetCell(position.X, position.Y);
-        int tileValue = cell.Tile.Value; 
-
-        switch (cell.PremiumType) {
-            case PremiumSquareType.DL: 
-                tileValue *= 2;
-                break;
-            case PremiumSquareType.TL: 
-                tileValue *= 3;
-                break;
-            case PremiumSquareType.DW: 
-                wordMultiplier *= 2;
-                break;
-            case PremiumSquareType.TW: 
-                wordMultiplier *= 3;
-                break;
-        }
-
-        wordScore += tileValue; 
-    }
-
-    return wordScore * wordMultiplier;
-}
 
     public bool IsValidPlacement(Word word) {
         if (word.IsHorizontal && (word.Start.X + word.Tiles.Count > 15)) {
@@ -208,12 +180,10 @@ class GameController {
 
         return true;
     }
-
-    public bool IsAdjacentToExisting(Word word) {
-        return this.Board.IsAdjacentToExisting(word);
-    }
     
     public bool IsCentered(Word word) {
+        // not reference by any method
+        // cause manually first placement in centered by default setting game scrabble
         return true;
     }
 }

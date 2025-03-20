@@ -17,7 +17,7 @@ class Player : IPlayer{
         if (Tiles == null || Tiles.Count == 0) {
             Console.WriteLine($"{Name}'s Rack: (Empty)");
         } else {
-            Console.WriteLine($"{Name}'s Rack: {string.Join(" ", Tiles?.Select(t => t.Letter) )}");
+            Console.WriteLine($"{Name}'s Rack: {string.Join(" ", Tiles.Select(t => t.Letter) )}");
         }
         Console.WriteLine();
     }

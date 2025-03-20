@@ -134,6 +134,8 @@ class Board : IBoard {
             }
             Console.WriteLine();
         }
+        
+        Console.WriteLine("");
     }
 
     public int PlaceWorld(IPlayer player, Word word) {
