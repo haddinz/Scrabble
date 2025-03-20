@@ -11,7 +11,6 @@ This is a console-based Scrabble game implemented in C#. The game allows players
 - Shuffle the player's rack
 - Calculate and display scores
 - Determine the game winner
-- Display a banner with ASCII art
 
 ## Getting Started
 
