@@ -28,7 +28,7 @@ This is a console-based Scrabble game implemented in C#. The game allows players
 
 2. Navigate to the project directory:
     ```sh
-    cd scrabble-game
+    cd Scrabble
     ```
 
 3. Build the project:
@@ -91,6 +91,19 @@ This is a console-based Scrabble game implemented in C#. The game allows players
 
 - Manages the tiles in the game.
 - Provides methods to draw tiles, return tiles, and shuffle the tiles.
+
+### Tile
+
+- Represents a single tile in the game.
+- Contains properties for the letter and value of the tile.
+- Provides a method to get the value of a tile based on its letter.
+
+### Word
+
+- Represents a word placed on the board.
+- Contains a list of tiles and the starting position of the word.
+- Provides methods to get the covered positions and check if the word is horizontal or vertical.
+
 
 ### Board
 
