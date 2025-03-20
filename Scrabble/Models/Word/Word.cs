@@ -5,7 +5,8 @@ class Word {
 
     public Word(List<Tile> tiles, Position start, bool isHorizontal){
         if (tiles == null || tiles.Count == 0) {
-            throw new ArgumentException("Word must have at least one tile");
+            Console.WriteLine("Word must have at least one tile");
+            return;
         }
 
         this.Tiles = tiles;

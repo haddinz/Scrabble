@@ -10,9 +10,9 @@
 
         Action<IPlayer> turnAdvanced = player => display.SetMessage($"{player.GetName()}'s turn advanced.");
 
-        GameController gameController = new(validateWord, turnAdvanced);
-     
-        display.DisplayBanner();    
+        GameController gameController = new(validateWord, turnAdvanced); 
+
+        display.DisplayBanner();
 
         gameController.StartGame();  
         bool isHorizontal = true;

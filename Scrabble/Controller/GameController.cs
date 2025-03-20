@@ -43,7 +43,8 @@ class GameController {
 
     public void AdvanceTurn(){
         if (Players.Count == 0){
-            throw new InvalidOperationException("No players in the game");
+            Console.WriteLine("No players in the game");
+            return;
         }
 
         this.CurrentPlayerIndex = (CurrentPlayerIndex + 1) % this.Players.Count;
@@ -54,6 +55,22 @@ class GameController {
 
     public IPlayer GetCurrentPlayer(){
         return Players[CurrentPlayerIndex];
+    }
+
+    public bool IsValidPlacement(Word word) {
+        if (word.IsHorizontal && (word.Start.X + word.Tiles.Count > 15)) {
+            return false;
+        }
+
+        if (word.IsHorizontal && (word.Start.Y + word.Tiles.Count > 15)) {
+            return false;
+        }
+
+        if(Board.IsFirstWordPlaced() && !Board.IsAdjacentToExisting(word)) {
+            return false;
+        }
+
+        return true;
     }
 
     public void DisplayAllPlayerScores() {
@@ -155,7 +172,6 @@ class GameController {
     }
     
     public bool ValidateWordPlacement(Word word){
-        // was successfully managed by delegate
         return true;
     }
     
@@ -164,26 +180,8 @@ class GameController {
 
         return score;
     }
-
-    public bool IsValidPlacement(Word word) {
-        if (word.IsHorizontal && (word.Start.X + word.Tiles.Count > 15)) {
-            return false;
-        }
-
-        if (word.IsHorizontal && (word.Start.Y + word.Tiles.Count > 15)) {
-            return false;
-        }
-
-        if(Board.IsFirstWordPlaced() && !Board.IsAdjacentToExisting(word)) {
-            return false;
-        }
-
-        return true;
-    }
     
     public bool IsCentered(Word word) {
-        // not reference by any method
-        // cause manually first placement in centered by default setting game scrabble
         return true;
     }
 }
